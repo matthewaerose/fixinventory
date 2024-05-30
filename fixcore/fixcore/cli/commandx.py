@@ -41,7 +41,7 @@ class IdxCommand(CLICommand):
                 if idx_name not in indexes:
                     try:
                         vertex.add_persistent_index(
-                            [f"{section}.{prop}"], sparse=True, name=idx_name, in_background=True
+                            [f"{section}.{prop}"], sparse=True, name=idx_name, in_background=False
                         )
                         yield f"Index created on {prop}"
                     except Exception as e:
