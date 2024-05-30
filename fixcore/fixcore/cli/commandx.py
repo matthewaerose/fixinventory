@@ -39,8 +39,13 @@ class IdxCommand(CLICommand):
                 #     ) as cursor:
                 #         if [item async for item in cursor]:
                 if idx_name not in indexes:
-                    vertex.add_persistent_index([f"{section}.{prop}"], sparse=True, name=idx_name, in_background=True)
-                    yield f"Index created on {prop}"
+                    try:
+                        vertex.add_persistent_index(
+                            [f"{section}.{prop}"], sparse=True, name=idx_name, in_background=True
+                        )
+                        yield f"Index created on {prop}"
+                    except Exception as e:
+                        yield f"Error creating index on {prop}: {e}"
 
         return CLISource.no_count(run)
 
