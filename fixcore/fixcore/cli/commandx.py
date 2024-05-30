@@ -30,15 +30,16 @@ class IdxCommand(CLICommand):
             db = dba.get_graph_db(ctx.graph_name)
             model = await self.dependencies.model_handler.load_model(ctx.graph_name)
             for prop in props:
-                term = P.array(prop).for_any.ne(None) if prop.endswith("]") else P.single(prop).ne(None)
                 idx_name = f"z_{prop}"
+                # term = P.array(prop).for_any.ne(None) if prop.endswith("]") else P.single(prop).ne(None)
+                # if idx_name not in indexes:
+                #     async with await db.search_list(
+                #         QueryModel(Query.by(term).on_section(Section.reported).with_limit(1), model)
+                #     ) as cursor:
+                #         if [item async for item in cursor]:
                 if idx_name not in indexes:
-                    async with await db.search_list(
-                        QueryModel(Query.by(term).on_section(Section.reported).with_limit(1), model)
-                    ) as cursor:
-                        if [item async for item in cursor]:
-                            vertex.add_persistent_index([prop], sparse=True, name=idx_name, in_background=True)
-                            yield f"Index created on {prop}"
+                    vertex.add_persistent_index([prop], sparse=True, name=idx_name, in_background=True)
+                    yield f"Index created on {prop}"
 
         return CLISource.no_count(run)
 
