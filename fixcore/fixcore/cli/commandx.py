@@ -27,6 +27,7 @@ class IdxCommand(CLICommand):
             sdb = dba.database
             vertex = sdb.collection(ctx.graph_name)
             indexes = {idx["name"] for idx in vertex.indexes()}
+            section = ctx.section
             # db = dba.get_graph_db(ctx.graph_name)
             # model = await self.dependencies.model_handler.load_model(ctx.graph_name)
             for prop in props:
@@ -38,7 +39,7 @@ class IdxCommand(CLICommand):
                 #     ) as cursor:
                 #         if [item async for item in cursor]:
                 if idx_name not in indexes:
-                    vertex.add_persistent_index([prop], sparse=True, name=idx_name, in_background=True)
+                    vertex.add_persistent_index([f"{section}.{prop}"], sparse=True, name=idx_name, in_background=True)
                     yield f"Index created on {prop}"
 
         return CLISource.no_count(run)
