@@ -27,8 +27,8 @@ class IdxCommand(CLICommand):
             sdb = dba.database
             vertex = sdb.collection(ctx.graph_name)
             indexes = {idx["name"] for idx in vertex.indexes()}
-            db = dba.get_graph_db(ctx.graph_name)
-            model = await self.dependencies.model_handler.load_model(ctx.graph_name)
+            # db = dba.get_graph_db(ctx.graph_name)
+            # model = await self.dependencies.model_handler.load_model(ctx.graph_name)
             for prop in props:
                 idx_name = f"z_{prop}"
                 # term = P.array(prop).for_any.ne(None) if prop.endswith("]") else P.single(prop).ne(None)
