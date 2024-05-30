@@ -24,6 +24,7 @@ from fixcore.analytics.posthog import PostHogEventSender
 from fixcore.analytics.recurrent_events import emit_recurrent_events
 from fixcore.cli.cli import CLIService
 from fixcore.cli.command import alias_names, all_commands
+from fixcore.cli.commandx import all_commands as all_commandsx
 from fixcore.config.config_handler_service import ConfigHandlerService
 from fixcore.config.config_override_service import ConfigOverrideService, model_from_db, override_config_for_startup
 from fixcore.config.core_config_handler import CoreConfigHandler
@@ -196,7 +197,9 @@ async def direct_tenant(deps: TenantDependencies) -> None:
     )
     deps.add(ServiceNames.user_management, UserManagementService(db, config_handler, event_sender))
     default_env = {"graph": config.cli.default_graph, "section": config.cli.default_section}
-    cli = deps.add(ServiceNames.cli, CLIService(deps, all_commands(deps), default_env, alias_names()))
+    cli = deps.add(
+        ServiceNames.cli, CLIService(deps, all_commands(deps) + all_commandsx(deps), default_env, alias_names())
+    )
     deps.add(ServiceNames.template_expander, TemplateExpanderService(db.template_entity_db, cli))
     inspector = deps.add(ServiceNames.inspector, InspectorService(cli))
     subscriptions = deps.add(ServiceNames.subscription_handler, SubscriptionHandlerService(message_bus))
